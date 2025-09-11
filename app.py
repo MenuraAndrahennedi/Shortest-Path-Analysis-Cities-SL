@@ -77,6 +77,19 @@ def total_time_min(path_ids, adjacency) -> float:
                     break
     return total
 
+# ----------------------------- Edge & Node Count ----------------------------- #
+def edge_count(path_ids) -> int:
+    return max(0, len(path_ids) - 1)
+
+def node_count(path_ids) -> int:
+    return len(path_ids)
+
+def algorithm_step_count(result: dict) -> int | None:
+    if "relaxations_done" in result:
+        return result["relaxations_done"]
+    return None
+
+
 
 # ---------------- Run Algorithms and Show Maps ----------------
 if go:
@@ -109,6 +122,19 @@ if go:
                 # Algorithm runtime (ms)
                 st.markdown(f"**Computation time:** `{result['runtime_sec'] * 1000:.1f} ms`")
 
+                # NEW: Step count + (optional) breakdown
+                steps = algorithm_step_count(result)
+                if steps is not None:
+                    st.markdown(f"**Step count:** `{steps}`")
+
+                # Display Steps
+                has_step_metrics_bellman_ford = any(k in result for k in ("iterations", "relaxations_done", "edges_scanned"))
+                if has_step_metrics_bellman_ford:
+                    iters = result.get("iterations", "-")
+                    relx  = result.get("relaxations_done", "-")
+                    scans = result.get("edges_scanned", "-")
+                    st.markdown(f"**Passes:** `{iters}`  | **Relaxations:** `{relx}`  | **Edges scanned:** `{scans}`")
+
                 # Display other details
                 if result["path"]:
                     total_km  = total_distance_km(result["path"], adj)
@@ -116,6 +142,8 @@ if go:
 
                     st.markdown(f"**Total Distance:** `{total_km:.3f} km`")
                     st.markdown(f"**Total Time:** `{total_min:.2f} min`")
+                    st.markdown(f"**Roads count:** `{edge_count(result['path'])}`")
+                    st.markdown(f"**Cities count:** `{node_count(result['path'])}`")
 
                     # Stops (traveling city list)
                     stops = " → ".join(nodes_used[n]["name"] for n in result["path"])
@@ -123,8 +151,10 @@ if go:
                 else:
                     st.markdown("**Total Distance:** `N/A`")
                     st.markdown("**Total Time:** `N/A`")
+                    st.markdown("**Roads count:** `N/A`")
+                    st.markdown("**Cities count:** `N/A`")
                     st.warning("No path found for this algorithm.")
-
+                
 else:
     st.info("Pick a Source and Destination, then click **Compute routes**.")
 

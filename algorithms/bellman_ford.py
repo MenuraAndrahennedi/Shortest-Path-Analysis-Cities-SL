@@ -51,7 +51,11 @@ def bellman_ford_shortest_path(
     t0 = time.perf_counter()
 
     # Get a list of node ids
-    nodes: List[int] = list(adj.keys())
+    node_set = set(adj.keys())
+    for u, edges in adj.items():
+        for v, *_ in edges:
+            node_set.add(v)
+    nodes: List[int] = list(node_set)
     n = len(nodes)
 
     # Initialize distances to infinity and parent to zero
@@ -65,7 +69,7 @@ def bellman_ford_shortest_path(
 
     # Relax edges up to n-1 times
     for single_iteration in range(n - 1):
-        iterations += 1
+        iterations = single_iteration + 1
         any_relaxed = False
         for u in nodes:
             current_weight = weights[u]
@@ -75,9 +79,9 @@ def bellman_ford_shortest_path(
                 edges_scanned += 1
                 v, _, _ = edge
                 weight = weight_fn(edge)
-                new_dist = current_weight + weight
-                if new_dist < weights[v]:
-                    weights[v] = new_dist
+                new_weight = current_weight + weight
+                if new_weight < weights.get(v, inf):
+                    weights[v] = new_weight
                     parent[v] = u
                     any_relaxed = True
                     relaxations_done += 1
@@ -103,6 +107,8 @@ def bellman_ford_shortest_path(
                     changed_nodes.add(v)
                     if negative_cycle:
                         goal_affected = is_can_reach_goal(adj, changed_nodes, goal)
+
+    goal_affected = is_can_reach_goal(adj, changed_nodes, goal) if negative_cycle else False
 
     t1 = time.perf_counter()
 
