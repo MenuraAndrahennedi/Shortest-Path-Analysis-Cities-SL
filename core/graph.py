@@ -70,6 +70,9 @@ def load_graph(
         if undirected:
             add_edge(v, u, d, t)
 
+    for node_id in nodes:
+        adj.setdefault(node_id, [])
+
     return nodes, adj
 
 # -------------------------- Get City ID from City name ------------------------- #
