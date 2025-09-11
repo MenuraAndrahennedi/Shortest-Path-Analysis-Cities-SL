@@ -127,7 +127,7 @@ if go:
                 if steps is not None:
                     st.markdown(f"**Step count:** `{steps}`")
 
-                # If Bellman–Ford metrics are present, show a short breakdown
+                # Display Steps
                 has_step_metrics_bellman_ford = any(k in result for k in ("iterations", "relaxations_done", "edges_scanned"))
                 if has_step_metrics_bellman_ford:
                     iters = result.get("iterations", "-")
