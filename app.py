@@ -7,12 +7,6 @@ from core.graph import load_graph
 from service.run_all import run_all
 from core.vizualize import map_to_html
 
-st.markdown(
-    f"<style>{pathlib.Path('styles.css').read_text()}</style>", 
-    unsafe_allow_html=True
-)
-
-
 st.set_page_config(page_title="Shortest Path Algorithm Analysis", layout="wide")
 
 st.title("Shortest Path Algorithm Analysis")
