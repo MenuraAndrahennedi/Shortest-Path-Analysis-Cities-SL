@@ -10,7 +10,7 @@ DEFAULT_CENTER: COORDINATE = (7.8731, 80.7718) # Sri Lanka map center
 
 ALGORITHM_COLORS = {
     "A*": "#31AB37",          # green
-    "Dijkstra": "#2962FF",    # blue
+    "Dijkstra": "#E7B100",    # blue
     "Bellman-Ford": "#7E2FB0" # purple
 }
 
@@ -94,10 +94,16 @@ def generate_map(
             folium.PolyLine(coords, weight=line_weight, color=line_color, opacity=line_opacity).add_to(m)
 
     # Path Tooltips
-    if show_tooltips:
-        for i, coord in enumerate(coords):
-            tt = f"Node {i}: {nodes[path_ids[i]]['name']}"
-            folium.Marker(coord, tooltip=tt).add_to(m)
+    if show_tooltips and len(coords) > 2:
+        for i in range(1, len(coords) - 1):  # <- skip 0 and -1
+            folium.CircleMarker(
+                location=coords[i],
+                radius=4,
+                tooltip=nodes[path_ids[i]]["name"],
+                fill=True,
+                weight=3,
+                opacity=1,
+            ).add_to(m)
 
     # Fit Map to path area
     if fit_to_path:
