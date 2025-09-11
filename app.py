@@ -1,21 +1,29 @@
 from __future__ import annotations
 
-import streamlit as st
+import streamlit as st, pathlib
 from streamlit.components.v1 import html
 
 from core.graph import load_graph
 from service.run_all import run_all
 from core.vizualize import map_to_html
 
+st.markdown(
+    f"<style>{pathlib.Path('styles.css').read_text()}</style>", 
+    unsafe_allow_html=True
+)
+
+
 st.set_page_config(page_title="Shortest Path Algorithm Analysis", layout="wide")
+
 st.title("Shortest Path Algorithm Analysis")
+st.subheader("Compare algorithms on real Sri Lankan road networks")
 
-
-# ---------------- Settings Bar ----------------
-with st.sidebar:
-    st.header("Settings")
+col1, col2, col3 = st.columns([2,3,7])
+with col1:
     undirected = st.toggle("Treat roads as undirected (two-way)", value=True)
+with col2:
     st.caption("Tip: If a city pair shows “No path found”, enable two-way roads.")
+with col3:
     show_tooltips = st.toggle("Show intermediate node tooltips", value=False)
 
 # ---------- Load graph (cached) ---------
@@ -30,7 +38,7 @@ nodes, adj, ids, labels = load_graph_data(undirected)
 
 
 # ---------------- Source, Target, and Mode Selection ----------------
-c1, c2, c3 = st.columns([1, 1, 1])
+c1, c2, c3 = st.columns([2, 2, 3])
 with c1:
     src_id = st.selectbox("Source", options=ids, format_func=lambda x: labels[x], index=0)
 with c2:
