@@ -77,6 +77,13 @@ def total_time_min(path_ids, adjacency) -> float:
                     break
     return total
 
+# ----------------------------- Edge & Node Count ----------------------------- #
+def edge_count(path_ids) -> int:
+    return max(0, len(path_ids) - 1)
+
+def node_count(path_ids) -> int:
+    return len(set(path_ids))
+
 
 # ---------------- Run Algorithms and Show Maps ----------------
 if go:
@@ -116,6 +123,8 @@ if go:
 
                     st.markdown(f"**Total Distance:** `{total_km:.3f} km`")
                     st.markdown(f"**Total Time:** `{total_min:.2f} min`")
+                    st.markdown(f"**Roads count:** `{edge_count(result['path'])}`")
+                    st.markdown(f"**Cities count:** `{node_count(result['path'])}`")
 
                     # Stops (traveling city list)
                     stops = " → ".join(nodes_used[n]["name"] for n in result["path"])
@@ -123,8 +132,10 @@ if go:
                 else:
                     st.markdown("**Total Distance:** `N/A`")
                     st.markdown("**Total Time:** `N/A`")
+                    st.markdown("**Roads count:** `N/A`")
+                    st.markdown("**Cities count:** `N/A`")
                     st.warning("No path found for this algorithm.")
-
+                
 else:
     st.info("Pick a Source and Destination, then click **Compute routes**.")
 
