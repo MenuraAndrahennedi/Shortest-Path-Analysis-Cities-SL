@@ -20,7 +20,7 @@ def a_star_distance_heuristic(goal_id: int, nodes: Dict[int, Dict[str, Any]]) ->
         return geodesic_km(float(node["lat"]), float(node["lon"]), goal_lat, goal_lon)
     return h_distance
 
-def astar_time_heuristic(
+def a_star_time_heuristic(
     goal_id: int,
     nodes: Dict[int, Dict[str, Any]],
     max_kmh: float = 70.0,
@@ -49,7 +49,7 @@ def node_distance_km(a_id: int, b_id: int, nodes: Dict[int, Dict[str, Any]]) -> 
 
 __all__ = [
     "geodesic_km",
-    "astar_heuristic",
-    "astar_time_heuristic",
+    "a_star_distance_heuristic",
+    "a_star_time_heuristic",
     "node_distance_km",
 ]

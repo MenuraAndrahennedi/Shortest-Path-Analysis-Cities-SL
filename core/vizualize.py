@@ -34,7 +34,7 @@ def generate_map(
     nodes: NODES,
     path_ids: Sequence[int] | None,
     *,
-    tiles: str = "MAP",
+    tiles: str = "OpenStreetMap",
     line_color: str = "#133EFF",
     line_weight: int = 5,
     line_opacity: float = 0.9,
@@ -57,7 +57,7 @@ def generate_map(
             center_lon = sum(lon for _, lon in coords) / len(coords)
             center = (center_lat, center_lon)
 
-    m = folium.Map(location=center, zoom_start=zoom_start, tiles=tiles)
+    m = folium.Map(location=center, zoom_start=zoom_start, tiles=tiles, control_scale=control_scale)
     # if control_scale:
     #     folium.plugins.Scale().add_to(m)
 
@@ -117,4 +117,4 @@ def map_to_html(m: folium.Map) -> str:
     return m.get_root().render()
 
 
-__all__ = ["ALGO_COLORS", "algo_color", "make_map", "save_map", "to_html"]
+__all__ = ["ALGORITHM_COLORS", "algorithm_color", "generate_map", "save_map", "map_to_html"]
