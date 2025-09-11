@@ -41,7 +41,7 @@ def generate_map(
     show_labels: bool = True,
     start_label: str = "Start",
     end_label: str = "End",
-    show_tooltips: bool = True,
+    show_tooltips: bool = False,
     fit_to_path: bool = True,
     zoom_start: int = 7,
     control_scale: bool = True,

@@ -16,7 +16,7 @@ with st.sidebar:
     st.header("Settings")
     undirected = st.toggle("Treat roads as undirected (two-way)", value=True)
     st.caption("Tip: If a city pair shows “No path found”, enable two-way roads.")
-
+    show_tooltips = st.toggle("Show intermediate node tooltips", value=False)
 
 # ---------- Load graph (cached) ---------
 @st.cache_data(show_spinner=False)
@@ -86,6 +86,7 @@ if go:
         weight_key=weight_key,
         undirected=undirected,
         return_maps=True,
+        show_tooltips=show_tooltips,
     )
     order = ["A*", "Dijkstra", "Bellman-Ford"]
     col_A, col_D, col_B = st.columns(3)
