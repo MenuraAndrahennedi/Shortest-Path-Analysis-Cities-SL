@@ -19,6 +19,7 @@ def run_all(
     weight_key: str = "distance_km",   # "distance_km" | "travel_time_min"
     undirected: bool = True,
     return_maps: bool = True,
+    show_tooltips=False
 ) -> Tuple[Dict[int, Dict[str, Any]], List[Dict[str, Any]], Dict[str, Any] | None]:
 
     # Load graph (once for fairness)
@@ -47,7 +48,7 @@ def run_all(
     maps = None
     if return_maps:
         maps = {
-            r["algorithm"]: generate_map(nodes, r["path"], line_color=algorithm_color(r["algorithm"]))
+            r["algorithm"]: generate_map(nodes, r["path"], line_color=algorithm_color(r["algorithm"]), show_tooltips=show_tooltips)
             for r in results
         }
 
