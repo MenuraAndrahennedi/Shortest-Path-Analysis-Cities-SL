@@ -29,19 +29,29 @@ For each path calculation, the application provides:
    cd Shortest-Path-Analysis-Cities-SL
    ```
 
-2. **Install dependencies:**
+2. **Create a venv:**
+
+   ```bash
+   python -m venv .venv
+      # Windows PowerShell:
+         .\.venv\Scripts\Activate.ps1
+      # macOS/Linux:
+         source .venv/bin/activate
+   ```
+
+3. **Install dependencies:**
 
    ```bash
    pip install -r requirements.txt
    ```
 
-3. **Run the application:**
+4. **Run the application:**
 
    ```bash
    streamlit run app.py
    ```
 
-4. **Open your browser** and navigate to `http://localhost:8501`
+5. **Open your browser** and navigate to `http://localhost:8501`
 
 ## Usage
 
