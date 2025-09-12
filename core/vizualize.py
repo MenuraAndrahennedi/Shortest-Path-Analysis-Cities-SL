@@ -11,7 +11,7 @@ DEFAULT_CENTER: COORDINATE = (7.8731, 80.7718) # Sri Lanka map center
 ALGORITHM_COLORS = {
     "A*": "#31AB37",          # green
     "Dijkstra": "#E7B100",    # blue
-    "Bellman-Ford": "#7E2FB0" # purple
+    "Bellman-Ford": "#F94FFF" # purple
 }
 
 def algorithm_color(name: str, fallback: str = "#000000") -> str:

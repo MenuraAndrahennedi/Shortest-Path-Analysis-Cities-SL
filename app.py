@@ -9,16 +9,18 @@ from core.vizualize import map_to_html
 
 st.set_page_config(page_title="Shortest Path Algorithm Analysis", layout="wide")
 
+st.divider()
 st.title("Shortest Path Algorithm Analysis")
-st.subheader("Compare algorithms on real Sri Lankan road networks")
+st.markdown("#### Compare algorithms on real Sri Lankan road networks")
+st.divider()
 
-col1, col2, col3 = st.columns([2,3,7])
-with col1:
-    undirected = st.toggle("Treat roads as undirected (two-way)", value=True)
-with col2:
-    st.caption("Tip: If a city pair shows “No path found”, enable two-way roads.")
-with col3:
-    show_tooltips = st.toggle("Show intermediate node tooltips", value=False)
+with st.container(border=True, width=1000):
+    col1, col2= st.columns([8,7])
+    with col1:
+        undirected = st.toggle("Treat roads as undirected (two-way)", value=True, help="If enabled, all roads are treated as two-way regardless of their actual direction.")
+        st.caption("Tip: If a city pair shows “No path found”, enable two-way roads.", help="There are only a few directed roads between city pairs in the dataset, so enabling this option is generally recommended.")
+    with col2:
+        show_tooltips = st.toggle("Show intermediate node tooltips", value=False)
 
 # ---------- Load graph (cached) ---------
 @st.cache_data(show_spinner=False)
@@ -32,14 +34,15 @@ nodes, adj, ids, labels = load_graph_data(undirected)
 
 
 # ---------------- Source, Target, and Mode Selection ----------------
-c1, c2, c3 = st.columns([2, 2, 3])
-with c1:
-    src_id = st.selectbox("Source", options=ids, format_func=lambda x: labels[x], index=0)
-with c2:
-    dst_id = st.selectbox("Target", options=ids, format_func=lambda x: labels[x], index=1)
-with c3:
-    mode = st.radio("Mode of shortest path", ["Distance (km)", "Travel time (min)"], index=0)
-    weight_key = "distance_km" if mode.startswith("Distance") else "travel_time_min"
+with st.container(border=True):
+    c1, c2, c3 = st.columns([2, 2, 3])
+    with c1:
+        src_id = st.selectbox("Source", options=ids, format_func=lambda x: labels[x], index=0)
+    with c2:
+        dst_id = st.selectbox("Target", options=ids, format_func=lambda x: labels[x], index=1)
+    with c3:
+        mode = st.radio("Mode of shortest path", ["Distance (km)", "Travel time (min)"], index=0, horizontal=True)
+        weight_key = "distance_km" if mode.startswith("Distance") else "travel_time_min"
 
 go = st.button("Compute routes", type="primary")
 
@@ -120,7 +123,9 @@ if go:
 
                 # Map 
                 html(map_to_html(maps[name]), height=420)
-
+                st.divider()
+                
+                st.markdown("#### Algorithm details")
                 # Algorithm runtime (ms)
                 st.markdown(f"**Computation time:** `{result['runtime_sec'] * 1000:.1f} ms`")
 
@@ -136,12 +141,14 @@ if go:
                     relx  = result.get("relaxations_done", "-")
                     scans = result.get("edges_scanned", "-")
                     st.markdown(f"**Passes:** `{iters}`  | **Relaxations:** `{relx}`  | **Edges scanned:** `{scans}`")
+                st.divider()
 
                 # Display other details
                 if result["path"]:
                     total_km  = total_distance_km(result["path"], adj)
                     total_min = total_time_min(result["path"], adj)
 
+                    st.markdown("#### Route details")
                     st.markdown(f"**Total Distance:** `{total_km:.3f} km`")
                     st.markdown(f"**Total Time:** `{total_min:.2f} min`")
                     st.markdown(f"**Roads count:** `{edge_count(result['path'])}`")
