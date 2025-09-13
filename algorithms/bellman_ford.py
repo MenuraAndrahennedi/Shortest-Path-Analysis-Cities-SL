@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 from typing import Dict, List, Tuple, Callable, Any, Set
 from math import inf
 import time
