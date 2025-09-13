@@ -90,10 +90,11 @@ def node_count(path_ids) -> int:
     return len(path_ids)
 
 def algorithm_step_count(result: dict) -> int | None:
-    if "relaxations_done" in result:
-        return result["relaxations_done"]
+    if "explored" in result:    # A*
+        return result["explored"]
+    if "iterations" in result:   # Bellman–Ford
+        return result["iterations"]
     return None
-
 
 
 # ---------------- Run Algorithms and Show Maps ----------------
@@ -137,10 +138,10 @@ if go:
                 # Display Steps
                 has_step_metrics_bellman_ford = any(k in result for k in ("iterations", "relaxations_done", "edges_scanned"))
                 if has_step_metrics_bellman_ford:
-                    iters = result.get("iterations", "-")
                     relx  = result.get("relaxations_done", "-")
                     scans = result.get("edges_scanned", "-")
-                    st.markdown(f"**Passes:** `{iters}`  | **Relaxations:** `{relx}`  | **Edges scanned:** `{scans}`")
+                    st.markdown(f"**Relaxations:** `{relx}`")
+                    st.markdown(f"**Edges scanning count:** `{scans}`")
                 st.divider()
 
                 # Display other details
@@ -156,7 +157,8 @@ if go:
 
                     # Stops (traveling city list)
                     stops = " → ".join(nodes_used[n]["name"] for n in result["path"])
-                    st.markdown(f"**Stops:** {stops}")
+                    st.markdown(f"##### Stops")
+                    st.markdown(f" {stops}")
                 else:
                     st.markdown("**Total Distance:** `N/A`")
                     st.markdown("**Total Time:** `N/A`")
