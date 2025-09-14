@@ -40,11 +40,11 @@ def a_star_shortest_path(
     # Choose heuristic function
     if weight_key == "distance_km":
         heuristic = a_star_distance_heuristic(goal, nodes)
-    elif weight_key == "time_min":
+    elif weight_key == "travel_time_min":
         heuristic = a_star_time_heuristic(goal, nodes, max_kmh=max_kmh)
     else:
-        raise ValueError("weight_key must be 'distance_km' or 'time_min'")
-    
+        raise ValueError("weight_key must be 'distance_km' or 'travel_time_min'")
+
     # Initialize data structures
     g_score: Dict[int, float] = {node_id: inf for node_id in nodes.keys()}
     g_score[start] = 0.0

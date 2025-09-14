@@ -4,9 +4,9 @@ from typing import Any, Dict, List, Tuple, Union
 
 from core.graph import load_graph, get_weight, get_city_id
 from core.vizualize import generate_map, algorithm_color
-from core.heuristics import a_star_distance_heuristic, a_star_time_heuristic
 from algorithms import bellman_ford as b_f
 from algorithms import a_star as astar
+from algorithms import dijkstras as dij
 
 def clarify_id(maybe_id_or_name: Union[int, str], nodes: Dict[int, Dict[str, Any]]) -> int:
     if isinstance(maybe_id_or_name, int):
@@ -37,12 +37,12 @@ def run_all(
 
     # Run Algorithms
     a_star       = astar.a_star_shortest_path(adj, nodes, start_id, goal_id, weight_type, weight_key=weight_key)
-    dijkstra  = b_f.bellman_ford_shortest_path(adj, start_id, goal_id, weight_type)
+    dijkstra     = dij.dijkstras_shortest_path(adj, nodes, start_id, goal_id, weight_type, weight_key=weight_key)
     bellman_ford = b_f.bellman_ford_shortest_path(adj, start_id, goal_id, weight_type)
 
     # # ------ TESTING -----------------
     # a_star["algorithm"]  = "A*"
-    dijkstra["algorithm"]  = "Dijkstra"
+    # dijkstra["algorithm"]  = "Dijkstra"
     # bellman_ford["algorithm"] = "Bellman-Ford"
 
     results = [a_star, dijkstra, bellman_ford]
