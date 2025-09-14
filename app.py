@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import streamlit as st, pathlib
 from streamlit.components.v1 import html
+import pandas as pd
 
 from core.graph import load_graph
 from service.run_all import run_all
@@ -31,7 +32,6 @@ def load_graph_data(undirected_flag: bool):
     return nodes, adj, ids, labels
 
 nodes, adj, ids, labels = load_graph_data(undirected)
-
 
 # ---------------- Source, Target, and Mode Selection ----------------
 with st.container(border=True):
@@ -168,6 +168,95 @@ if go:
                 
 else:
     st.info("Pick a Source and Destination, then click **Compute routes**.")
+
+
+st.divider()
+# ---------------- Possible Pairs (Directed & Undirected) ----------------
+@st.cache_data(show_spinner=False)
+def load_pairs_df():
+    path = pathlib.Path("data/diff_paths_directed_vs_undirected.csv")
+    if not path.exists():
+        raise FileNotFoundError(f"Could not find {path}. Please ensure the CSV file is in the 'data' directory.")
+    df = pd.read_csv(path)
+    keep_cols = [c for c in ["source_name", "target_name"] if c in df.columns]
+    if not keep_cols:
+        raise ValueError("CSV must include 'source_name' and 'target_name' columns.")
+    return df[keep_cols].dropna()
+
+def render_pairs_panel():
+    if "pairs_offset" not in st.session_state:
+        st.session_state.pairs_offset = 0
+    if "pairs_limit" not in st.session_state:
+        st.session_state.pairs_limit = 200
+
+    try:
+        df_pairs = load_pairs_df()
+    except Exception as e:
+        st.error(str(e))
+        return
+
+    q = st.text_input("Search source or target…", key="pairs_q")
+    limit = st.number_input("Rows per page", 50, 1000, st.session_state.pairs_limit, step=50, key="pairs_limit_num")
+    st.session_state.pairs_limit = int(limit)
+
+    cur = df_pairs
+    if q:
+        ql = q.lower()
+        src_ok = "source_name" in cur.columns
+        tgt_ok = "target_name" in cur.columns
+        if src_ok and tgt_ok:
+            cur = cur[cur["source_name"].str.lower().str.contains(ql) | cur["target_name"].str.lower().str.contains(ql)]
+        elif src_ok:
+            cur = cur[cur["source_name"].str.lower().str.contains(ql)]
+        elif tgt_ok:
+            cur = cur[cur["target_name"].str.lower().str.contains(ql)]
+
+    total = len(cur)
+    offset = min(st.session_state.pairs_offset, max(0, max(0, total - 1)))
+
+    cols = st.columns([1,1,4])
+    with cols[0]:
+        if st.button("Search / Refresh", key="pairs_refresh"):
+            st.session_state.pairs_offset = 0
+            offset = 0
+
+    start = offset
+    end = min(offset + st.session_state.pairs_limit, total)
+    page = cur.iloc[start:end]
+
+    st.dataframe(page, width='stretch', height=420)
+
+    c1, c2, c3, c4 = st.columns([2,1,1,2])
+    with c1:
+        st.caption(f"Showing {start + 1 if total else 0}–{end} of {total:,}")
+    with c2:
+        if st.button("‹ Prev", disabled=start <= 0, key="pairs_prev"):
+            st.session_state.pairs_offset = max(0, start - st.session_state.pairs_limit)
+            st.rerun()
+    with c3:
+        if st.button("Next ›", disabled=end >= total, key="pairs_next"):
+            st.session_state.pairs_offset = start + st.session_state.pairs_limit
+            st.rerun()
+    with c4:
+        if st.button("Close", key="pairs_close"):
+            st.session_state.show_pairs = False
+            st.rerun()
+
+with st.container(border=True):
+    st.subheader("Tip: Possible Paths (Directed & Undirected)")
+    st.markdown("Shows city pairs where at least one path exists in both modes of directed and undirected road networks.")
+    if st.button("View pairs", type="primary", key="pairs_open"):
+        st.session_state.show_pairs = False if st.session_state.get("show_pairs") else True
+
+    if st.session_state.get("show_pairs"):
+        # Use a modal if this Streamlit version supports it; otherwise, fall back to an expander
+        if hasattr(st, "modal"):
+            with st.modal("City Pairs (source → target)", key="pairs_modal"):
+                render_pairs_panel()
+        else:
+            with st.expander("City Pairs (source → target)", expanded=True):
+                render_pairs_panel()
+
 
 
 
