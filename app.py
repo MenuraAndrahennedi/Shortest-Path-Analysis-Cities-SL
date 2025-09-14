@@ -243,7 +243,7 @@ def render_pairs_panel():
             st.rerun()
 
 with st.container(border=True):
-    st.subheader("Tip: Possible Paths (Directed & Undirected)")
+    st.subheader("Tip: Explore Possible Paths (Directed & Undirected)")
     st.markdown("Shows city pairs where at least one path exists in both modes of directed and undirected road networks.")
     if st.button("View pairs", type="primary", key="pairs_open"):
         st.session_state.show_pairs = False if st.session_state.get("show_pairs") else True
