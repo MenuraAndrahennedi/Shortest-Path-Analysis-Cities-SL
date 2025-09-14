@@ -1,129 +1,159 @@
-# Sri Lanka Shortest Path Analysis
+# Shortest Path Algorithm Analysis
 
-A comprehensive web application for finding the shortest path between cities in Sri Lanka using Dijkstra's algorithm, with interactive map visualization.
+An interactive tool built with **Python + Streamlit** to analyze and compare shortest path algorithms for Sri Lankan cities.  
+It allows you to explore graph paths, test algorithms, and visualize results in real time.
 
-## Features
+---
 
-- 🗺️ **Interactive Map Visualization** - See your route on an interactive Folium map
-- 📊 **Comprehensive Analysis** - Get distance, travel time, algorithm performance metrics
-- 🏙️ **2,155+ Cities** - Access to all major cities and towns in Sri Lanka
-- ⚡ **Fast Algorithm** - Efficient Dijkstra's implementation with performance tracking
-- 🎨 **Beautiful UI** - Modern, responsive Streamlit interface
+## 📌 Features
 
-## What You Get
+- **Graph Input**
 
-For each path calculation, the application provides:
+  - Load cities & roads from CSV files.
+  - Choose **Directed** or **Undirected** graphs.
+  - Switch weight mode: **Distance (km)** or **Travel Time (min)**.
 
-1. **Total Distance** - Complete route distance in kilometers
-2. **Path/Nodes** - Step-by-step route with city names
-3. **Travel Time** - Estimated travel time in minutes and hours
-4. **Algorithm Runtime** - Time taken to calculate the path
-5. **Algorithm Steps** - Number of computational steps performed
+- **Algorithms Implemented**
 
-## Installation
+  - **Dijkstra’s Algorithm**
+  - **Bellman–Ford Algorithm**
+  - **A\* Algorithm** (with heuristics support).
 
-1. **Clone the repository:**
+- **Visualization**
+
+  - Interactive map plotting of paths.
+  - Dropdown menus for **Start** and **End** cities.
+  - Display all possible paths in a popup.
+
+- **Analysis & Results**
+  - Computation time.
+  - Passes / iterations.
+  - Relaxations performed.
+  - Edges scanned.
+  - Route summary (distance, travel time, city count, stops list).
+
+---
+
+## 📂 Project Structure
+
+```bash
+.
+├── algorithms/            # Algorithm implementations
+│   ├── a_star.py
+│   ├── bellman_ford.py
+│   └── dijkstras.py
+│
+├── core/                  # Core graph utilities
+│   ├── graph.py
+│   ├── heuristics.py
+│   └── vizualize.py
+│
+├── data/                  # Input datasets
+│   ├── cities.csv
+│   ├── edges.csv
+│   └── diff_paths_directed_vs_undirected.csv
+│
+├── service/               # Service layer
+│   └── run_all.py
+│
+├── app.py                 # Streamlit entry point
+├── requirements.txt       # Dependencies
+└── README.md
+```
+
+---
+
+## ⚡ Installation
+
+1. Clone the repository:
 
    ```bash
-   git clone <your-repo-url>
-   cd Shortest-Path-Analysis-Cities-SL
+   git clone <repo-url>
+   cd SHORTEST-PATH-ANALYSIS-CITIES-SL
    ```
 
-2. **Create a venv:**
+2. Create and activate virtual environment:
 
    ```bash
    python -m venv .venv
-      # Windows PowerShell:
-         .\.venv\Scripts\Activate.ps1
-      # macOS/Linux:
-         source .venv/bin/activate
+
+   source .venv/bin/activate   # Linux/Mac
+   .venv\Scripts\activate      # Windows
    ```
 
-3. **Install dependencies:**
+3. Install dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Run the application:**
-
+4. Run the application:
    ```bash
    streamlit run app.py
    ```
 
-5. **Open your browser** and navigate to `http://localhost:8501`
+---
 
-## Usage
+## 📊 Input & Output
 
-1. **Select Cities**: Use the sidebar to choose your starting city and destination
-2. **Find Path**: Click "Find Shortest Path" to calculate the optimal route
-3. **View Results**: See detailed analysis including distance, time, and performance metrics
-4. **Explore Map**: Interact with the map to see your route visually
+**Input**
 
-## Data Structure
+- CSV files from the `data/` folder.
+- User selections (source, target, directed/undirected, distance/time).
 
-The application uses two main data files:
+**Output**
 
-- **`data/cities.csv`** - Contains 2,155 cities with coordinates and metadata
-- **`data/edges.csv`** - Contains 29,600+ road connections with distances and travel times
+- Shortest path visualization on a map.
+- Algorithm statistics (iterations, relaxations, edges scanned).
+- Route summary details.
 
-## Algorithm Details
+---
 
-- **Algorithm**: Dijkstra's shortest path algorithm
-- **Graph Representation**: Adjacency list with bidirectional edges
-- **Optimization**: Priority queue (heapq) for efficient pathfinding
-- **Performance**: Typically finds paths in milliseconds
+## 🖥️ User Guide
 
-## Example Results
+1. Run the Streamlit app (`streamlit run app.py`).
+2. Open the UI in your browser.
+3. Select:
+   - Start city
+   - End city
+   - Weight mode (distance or time)
+   - Graph type (directed/undirected)
+4. View results in:
+   - **Map visualization**
+   - **Algorithm analysis panel**
+   - **Route details panel**
 
-```
-From: Akkaraipattu → To: Ampara
-Distance: 27.56 km
-Travel Time: 36.20 minutes
-Algorithm Runtime: 0.001 seconds
-Steps: 16
-```
+---
 
-## File Structure
+## 🔧 Technology Stack
 
-```
-project/
-├── app.py                 # Main Streamlit application
-├── algorithms/
-│   └── dijkstras.py      # Dijkstra's algorithm implementation
-├── core/
-│   └── graph.py          # Graph data structure and loading
-├── data/
-│   ├── cities.csv        # City data
-│   └── edges.csv         # Road connections
-├── requirements.txt      # Python dependencies
-└── README.md            # This file
-```
+- **Language:** Python 3.10+
+- **Framework:** Streamlit
+- **Algorithms:** Dijkstra, Bellman–Ford, A\*
+- **Data Format:** CSV
 
-## Future Enhancements
+---
 
-- [ ] Add A\* algorithm for comparison
-- [ ] Add Bellman-Ford algorithm for negative weights
-- [ ] Implement algorithm performance comparison
-- [ ] Add route optimization options
-- [ ] Export results to various formats
+## 🚀 Future Enhancements
 
-## Technologies Used
+- Add Floyd–Warshall algorithm.
+- Support JSON graph import/export.
+- Integration with **OpenStreetMap** datasets.
+- Multi-criteria optimization (distance + time).
+- Export results as PDF/Excel.
 
-- **Streamlit** - Web application framework
-- **Folium** - Interactive map visualization
-- **Pandas** - Data manipulation
-- **Python** - Core programming language
+---
 
-## Contributing
+## 👨‍💻 Author
 
-Feel free to contribute by:
+**Menura Andrahennedi**  
+B.Comp Hons in Computer Science
+University of Sri Jayewardenepura
 
-- Adding new algorithms
-- Improving the UI/UX
-- Optimizing performance
-- Adding new features
+**Suneth Chathuranga**  
+B.Comp Hons in Computer Science
+University of Sri Jayewardenepura
 
-## License
-
-This project is open source and available under the MIT License.
+**Chamodi Thennakoon**  
+B.Comp Hons in Computer Science
+University of Sri Jayewardenepura
